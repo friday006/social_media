@@ -4,34 +4,51 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const multer = require("multer");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
-// const loginRoute = require("./routes/auth");
-const cors = require("cors"); // Import CORS
-const postRoute = require("./routes/post")
+const postRoute = require("./routes/posts");
+const router = express.Router();
+const path = require("path");
+
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true },(err) => {
-        if(err) console.log(err) 
-        else console.log("mongdb is connected");
-})
-// mongoose.connect("mongodb+srv://priyankar:priyankarnigam01@cluster0.sgw7jqv.mongodb.net/social_node")
-//midleware
+mongoose.connect(
+  process.env.MONGO_URL,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  () => {
+    console.log("Connected to MongoDB");
+  }
+);
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
+//middleware
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
-app.use(cors()); // Enable CORS for all routes
 
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.body.name);
+  },
 });
 
-app.use("/api/auth",authRoute);
-app.use("/api/users",userRoute);
+const upload = multer({ storage: storage });
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  try {
+    return res.status(200).json("File uploded successfully");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 
-app.listen(8800,()=>{
-    console.log("Backend server is running!");
+app.listen(8800, () => {
+  console.log("Backend server is running!");
 });
