@@ -63,6 +63,37 @@ router.get("/", async (req, res) => {
   }
 });
 
+// get friends
+router.get("/friends/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const friends = await Promise.all(
+      user.followings.map((friendId) => {
+        return User.findById(friendId);
+      })
+    );
+
+    // Check if friends exist and map
+    let friendList = [];
+    friends.map((friend) => {
+      if (friend) {
+        const { _id, username, profilePicture } = friend;
+        friendList.push({ _id, username, profilePicture });
+      }
+    });
+
+    res.status(200).json(friendList);
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
 
 // follow a user
 router.put("/:id/follow", async (req,res)=>{
@@ -112,7 +143,7 @@ router.put("/:id/unfollow", async (req,res)=>{
                 // Update the current user's followings list
                 await currentUser.updateOne({$pull: {followings: req.params.id}});
                 // Respond with a success message
-                res.status(200).json("User has been ufollowed");
+                res.status(200).json("User has been unfollowed");
             }
             else{
                 // If already following, respond with a message indicating so
