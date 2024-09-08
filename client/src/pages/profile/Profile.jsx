@@ -19,7 +19,7 @@ export default function Profile() {
       setUser(res.data); 
     };
     fetchUser()
-  },[username]);
+  },[username, API_URL]);
 
   return (
     <>

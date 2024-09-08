@@ -27,7 +27,7 @@ export default function Rightbar({ user }) {
       };
       getFriends();
     }
-  }, [user]);
+  }, [user, API_URL]);
 
 
 

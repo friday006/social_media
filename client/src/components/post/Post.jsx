@@ -34,7 +34,7 @@ export default function Post({post}) {
           setUser(res.data);
         };
         fetchUser();
-      }, [post.userId]);
+      }, [post.userId, API_URL]);
     //   console.log(user.profilePicture)
   return (
     <div className="post">
