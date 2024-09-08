@@ -25,7 +25,7 @@ export default function Register() {
             password: password.current.value
         }
         try{
-            await axios.post(API_URL+"/auth/register", user);
+            await axios.post("https://social-backend.netlify.app/api/auth/register", user);
             navigate("/login");
         }
         catch(err){
