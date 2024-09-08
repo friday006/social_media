@@ -12,11 +12,12 @@ export default function Post({post}) {
     const [isLiked, setIsLiked] = useState(false)
     const [user, setUser] = useState({});
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const AU = process.env.REACT_APP_API_URL;
     const {user: currentUser} = useContext(AuthContext);
 
     const likeHandler = ()=>{
         try{
-            axios.put("/posts/"+post._id+"/like", {userId: currentUser._id})
+            axios.put(AU + "posts/"+post._id+"/like", {userId: currentUser._id})
         }
         catch(err){}
         setLike(isLiked ? like-1: like+1)
@@ -29,7 +30,7 @@ export default function Post({post}) {
 
     useEffect(() => {
         const fetchUser = async () => {
-          const res = await axios.get(`/users?userId=${post.userId}`);
+          const res = await axios.get(`${AU}users?userId=${post.userId}`);
           setUser(res.data);
         };
         fetchUser();

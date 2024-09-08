@@ -42,7 +42,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8800/api/",
   "devDependencies": {
     "axe-core": "^4.10.0"
   }
