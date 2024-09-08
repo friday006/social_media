@@ -9,6 +9,7 @@ const authRoute = require("../routes/auth");
 const postRoute = require("../routes/posts");
 const path = require("path");
 const serverless = require("serverless-http")
+const cors = require('cors');
 
 dotenv.config();
 
@@ -23,8 +24,13 @@ mongoose.connect(
   }
 );
 
+app.use(cors({
+  origin: ['https://social-node.netlify.app', 'https://social-node.netlify.app/'], // Allow these origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 // Serve static images
-app.use("/.netlify/functions/api/images", express.static(path.join(__dirname, "public/images")));
+app.use("/api/images", express.static(path.join(__dirname, "public/images")));
 
 // Middleware
 app.use(express.json());
@@ -43,7 +49,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // File upload route
-app.post("/.netlify/functions/api/upload", upload.single("file"), (req, res) => {
+app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
     return res.status(200).json("File uploaded successfully");
   } catch (error) {
