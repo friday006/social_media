@@ -15,10 +15,10 @@ function App (){
         <Routes>
             <Route exact path="/"
                element= 
-               {user ? <Home/> : <Register/>}/>
+               {<Home/>}/>
             <Route path="/login"
                element= 
-               {user ? <Navigate to="/"/> : <Login/>}/>
+               {<Login/>}/>
             <Route exact path="/register"
                element= {user ? <Navigate to="/"/> : <Register/>}/>
             <Route exact path="/profile/:username"
