@@ -7,14 +7,15 @@ import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../context/AuthContext"
 
 export default function Feed({username}) {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [posts, setPosts] = useState([]);
   const {user} = useContext(AuthContext);
 
   useEffect(()=>{
     const fetchPosts = async ()=>{
       const res = username
-      ? await axios.get('/posts/profile/'+ username)
-      : await axios.get('posts/timeline/'+ user._id)
+      ? await axios.get(API_URL+'/posts/profile/'+ username)
+      : await axios.get(API_URL+'/posts/timeline/'+ user._id)
       // console.log(res.data)
       setPosts(
         res.data.sort((p1,p2)=>{

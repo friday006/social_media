@@ -10,6 +10,7 @@ import { Add, Remove } from '@mui/icons-material';
 
 export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const API_URL = process.env.REACT_APP_API_URL;
   const [friends, setFriends] = useState([]);
   const {user: currentUser, dispatch} = useContext(AuthContext)
   const [followed, setFollowed] = useState(currentUser.followings.includes(user?.id));
@@ -18,7 +19,7 @@ export default function Rightbar({ user }) {
     if (user && user._id) {
       const getFriends = async () => {
         try {
-          const friendList = await axios.get("/users/friends/" + user._id);
+          const friendList = await axios.get(API_URL+"/users/friends/" + user._id);
           setFriends(friendList.data);
         } catch (error) {
           console.log("Error fetching friends:", error);
@@ -33,11 +34,11 @@ export default function Rightbar({ user }) {
   const handleClick = async ()=>{
     try {
       if(followed){
-        await axios.put("/users/"+user._id+ "/unfollow", {userId: currentUser._id})
+        await axios.put(API_URL+"/users/"+user._id+ "/unfollow", {userId: currentUser._id})
         dispatch({type:"UNFOLLOW", payload: user._id})
       }
       else{
-        await axios.put("/users/"+user._id+ "/follow", {userId: currentUser._id})
+        await axios.put(API_URL+"/users/"+user._id+ "/follow", {userId: currentUser._id})
         dispatch({type:"FOLLOW", payload: user._id})
       }
     } catch (error) {

@@ -42,7 +42,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://social-backend.netlify.app/api/",
   "devDependencies": {
     "axe-core": "^4.10.0"
   }
