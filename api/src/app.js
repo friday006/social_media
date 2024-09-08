@@ -23,12 +23,35 @@ mongoose.connect(
     console.log("Connected to MongoDB");
   }
 );
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? ['https://social-node.netlify.app/']
+  : ['http://localhost:3000'];
 
 app.use(cors({
-  origin: ['https://social-node.netlify.app', 'https://social-node.netlify.app/'], // Allow these origins
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // Allow cookies or authentication headers to be passed
+}));
+
+app.options('*', cors({
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', process.env.NODE_ENV === 'production' ? 'https://social-node.netlify.app/' : 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 // Serve static images
 app.use("/api/images", express.static(path.join(__dirname, "public/images")));
 
