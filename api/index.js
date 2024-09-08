@@ -11,7 +11,11 @@ const postRoute = require("./routes/posts");
 const router = express.Router();
 const path = require("path");
 
+const PORT = process.env.PORT || 8800;
+
 dotenv.config();
+
+mongoose.set('strictQuery', false);
 
 mongoose.connect(
   process.env.MONGO_URL,
@@ -29,26 +33,30 @@ app.use(morgan("common"));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/images");
+    cb(null, path.join(__dirname, "public/images"));
   },
   filename: (req, file, cb) => {
-    cb(null, req.body.name);
+    const fileName = req.body.name || Date.now() + path.extname(file.originalname); // Fallback
+    cb(null, fileName);
   },
 });
+
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
-    return res.status(200).json("File uploded successfully");
+    return res.status(200).json("File uploaded successfully");
   } catch (error) {
     console.error("File upload failed:", error);
+    res.status(500).json({ error: "File upload failed" }); // Handle error without crashing
   }
 });
+
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 
-app.listen(8800, () => {
+app.listen(PORT, () => {
   console.log("Backend server is running!");
 });
