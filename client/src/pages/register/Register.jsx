@@ -11,7 +11,6 @@ export default function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
-  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleClick = async (e) => {
     e.preventDefault();
