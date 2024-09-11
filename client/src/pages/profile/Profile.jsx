@@ -20,7 +20,7 @@ export default function Profile() {
       setUser(res.data); 
     };
     fetchUser()
-  },[username]);
+  },[username, AU]);
 
   return (
     <>

@@ -38,7 +38,7 @@ export default function Feed({username}) {
     // console.log(`${AU}posts/profile/${username}`);
     // console.log(posts); // Should be a string, e.g., "john_doe"
 
-  },[username, user._id]);
+  },[username, user._id, AU]);
 
   return (
     <div className='feed'>

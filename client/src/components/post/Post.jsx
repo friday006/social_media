@@ -38,7 +38,7 @@ export default function Post({ post }) {
       }
     };
     fetchUser();
-  }, [post.userId]);
+  }, [post.userId, AU]);
 //   console.log(post)
   return (
     <div className="post">
