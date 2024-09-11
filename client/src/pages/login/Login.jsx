@@ -23,7 +23,7 @@ export default function Login() {
     <div className="login">
         <div className="loginWrapper">
             <div className="loginRight">
-                <h3 className="loginLogo">LamaSocial</h3>
+                <h3 className="loginLogo">SocialNode</h3>
                 <span className="loginDesc">
                     Connect with your friends and world around you with LamaSocial.
                 </span>

@@ -13,17 +13,31 @@ export default function Feed({username}) {
 
   useEffect(()=>{
     const fetchPosts = async ()=>{
-      const res = username
-      ? await axios.get(AU + 'posts/profile/'+ username)
-      : await axios.get(AU + 'posts/timeline/'+ user._id)
-      // console.log(res.data)
-      setPosts(
-        res.data.sort((p1,p2)=>{
+      try {
+        const url = username
+        ? `${AU}posts/profile/${username}`
+        : `${AU}posts/timeline/${user._id}`;
+        
+        // Fetch posts from the backend
+        const res = await axios.get(url);
+        // console.log(res)
+
+      // Sort posts by creation date (latest first)
+        const sortedPosts = res.data.sort((p1, p2) => {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
-        })
-      );
-    };
+        });
+      // Update state with sorted posts
+            setPosts(sortedPosts);
+            
+            // console.log(sortedPosts);
+            } catch (err) {
+              console.error('Failed to fetch posts', err);
+            }
+            };
     fetchPosts()
+    // console.log(`${AU}posts/profile/${username}`);
+    // console.log(posts); // Should be a string, e.g., "john_doe"
+
   },[username, user._id]);
 
   return (
