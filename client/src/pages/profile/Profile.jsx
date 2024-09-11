@@ -22,16 +22,29 @@ export default function Profile() {
     fetchUser()
   },[username]);
 
+  useEffect(() => {
+    const imageUrl = `https://drive.google.com/uc?export=view&id=1k7FMNQBan3OrGEH7yqie-rxH0R_Ithm_`;
+    console.log("Image URL:", imageUrl);
+  }, []);
+  
+console.log(user.username)
+
+
   return (
     <>
-    <Topbar/>
+    {/* <Topbar/> */}
     <div className="profile">
-    <Sidebar/>
+    {/* <Sidebar/> */}
     <div className="profileRight">
         <div className="profileRightTop">
             <div className="profileCover">
-              <img className="profileCoverImg" src={user.coverPicture ? PF + user.coverPicture : PF + "person/noCover.png"} alt="" />
-                <img className="profileUserImg" src={user.profilePicture ? PF + user.profilePicture : PF + "person/noAvatar.png"} alt="" />
+            <img
+  src="https://via.placeholder.com/150"
+  alt="Placeholder"
+/>
+
+                {/* <img className="profileUserImg" src={`https://drive.google.com/uc?id=1k7FMNQBan3OrGEH7yqie-rxH0R_Ithm_` }
+          alt="Avatar" /> */}
             </div>
             <div className="profileInfo">
                 <h4 className="profileInfoName">{user.username}</h4>
@@ -39,8 +52,8 @@ export default function Profile() {
             </div>
         </div>
         <div className="profileRightBottom">
-        <Feed username={username}/>
-        <Rightbar user={user} someProp={"testprop"}/>
+        {/* <Feed username={username}/>
+        <Rightbar user={user} someProp={"testprop"}/> */}
         </div>
     </div>
     </div>
