@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const email = useRef();
     const password = useRef();
-    const { user,isFetching, dispatch } = useContext(AuthContext);
+    const {isFetching, dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -18,7 +18,7 @@ export default function Login() {
       dispatch
     );
   };
-    console.log(user)
+    // console.log(user)
   return (
     <div className="login">
         <div className="loginWrapper">
