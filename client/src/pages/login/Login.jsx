@@ -8,17 +8,21 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const email = useRef();
     const password = useRef();
-    const {isFetching, dispatch } = useContext(AuthContext);
+    const { user,isFetching, dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    loginCall(
-      { email: email.current.value, password: password.current.value },
-      dispatch
-    );
-  };
-    // console.log(user)
+    const handleClick = (e) => {
+      e.preventDefault();
+      loginCall(
+        { email: email.current.value, password: password.current.value },
+        dispatch
+      );
+    };
+  
+    if (user) {
+      // If the user is already logged in, redirect them to the profile page
+      navigate("/profile");
+    }
   return (
     <div className="login">
         <div className="loginWrapper">
