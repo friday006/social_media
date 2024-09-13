@@ -7,24 +7,38 @@ import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../context/AuthContext"
 
 export default function Feed({username}) {
-  const API_URL = process.env.REACT_APP_API_URL;
   const [posts, setPosts] = useState([]);
   const {user} = useContext(AuthContext);
+  const AU = process.env.REACT_APP_API_URL;
 
   useEffect(()=>{
     const fetchPosts = async ()=>{
-      const res = username
-      ? await axios.get(API_URL+'/posts/profile/'+ username)
-      : await axios.get(API_URL+'/posts/timeline/'+ user._id)
-      // console.log(res.data)
-      setPosts(
-        res.data.sort((p1,p2)=>{
+      try {
+        const url = username
+        ? `${AU}posts/profile/${username}`
+        : `${AU}posts/timeline/${user._id}`;
+        
+        // Fetch posts from the backend
+        const res = await axios.get(url);
+        // console.log(res)
+
+      // Sort posts by creation date (latest first)
+        const sortedPosts = res.data.sort((p1, p2) => {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
-        })
-      );
-    };
+        });
+      // Update state with sorted posts
+            setPosts(sortedPosts);
+            
+            // console.log(sortedPosts);
+            } catch (err) {
+              console.error('Failed to fetch posts', err);
+            }
+            };
     fetchPosts()
-  },[username, user._id, API_URL]);
+    // console.log(`${AU}posts/profile/${username}`);
+    // console.log(posts); // Should be a string, e.g., "john_doe"
+
+  },[username, user._id, AU]);
 
   return (
     <div className='feed'>

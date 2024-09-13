@@ -1,23 +1,31 @@
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar() {
-  const {user} = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <Link to={"/"} style={{textDecoration:"none"}}>
-        
-        <span className="logo">Lamasocial</span>
+        <Link to={"/"} style={{ textDecoration: "none" }}>
+          <span className="logo">SocialNode</span>
         </Link>
       </div>
       <div className="topbarCenter">
         <div className="searchbar">
-          <Search  className="searchIcon"/>
+          <Search className="searchIcon" />
           <input
             placeholder="Search for friend, post or video"
             className="searchInput"
@@ -43,10 +51,24 @@ export default function Topbar() {
             <span className="topbarIconBadge">3</span>
           </div>
         </div>
-      <Link to={`/profile/${user.username}`}>
-      <img src={user.profilePicture ? PF + user.profilePicture : PF + "person/noAvatar.png"} 
-      alt="" className="topbarImg" />
-      </Link>
+        <div className="topbarProfile">
+          <img
+            src={user.profilePicture ? PF + user.profilePicture : PF + "person/noAvatar.png"}
+            alt=""
+            className="topbarImg"
+            onClick={() => setDropdownVisible(!dropdownVisible)}
+          />
+          {dropdownVisible && (
+            <div className="dropdownMenu">
+              <Link to={`/profile/${user.username}`} className="dropdownItem">
+                Profile
+              </Link>
+              <span className="dropdownItem" onClick={handleLogout}>
+                Logout
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

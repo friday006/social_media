@@ -11,19 +11,23 @@ export default function Login() {
     const { user,isFetching, dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    loginCall(
-      { email: email.current.value, password: password.current.value },
-      dispatch
-    );
-  };
-    console.log(user)
+    const handleClick = (e) => {
+      e.preventDefault();
+      loginCall(
+        { email: email.current.value, password: password.current.value },
+        dispatch
+      );
+    };
+  
+    if (user) {
+      // If the user is already logged in, redirect them to the profile page
+      navigate("/profile");
+    }
   return (
     <div className="login">
         <div className="loginWrapper">
             <div className="loginRight">
-                <h3 className="loginLogo">LamaSocial</h3>
+                <h3 className="loginLogo">SocialNode</h3>
                 <span className="loginDesc">
                     Connect with your friends and world around you with LamaSocial.
                 </span>

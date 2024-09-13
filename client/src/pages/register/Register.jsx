@@ -10,9 +10,10 @@ export default function Register() {
   const passwordAgain = useRef();
   const navigate = useNavigate();
   const [error, setError] = useState('');
-
+  const AU = process.env.REACT_APP_API_URL;
 
   const handleClick = async (e) => {
+
     e.preventDefault();
     if(password.current.value !== passwordAgain.current.value){
         passwordAgain.current.setCustomValidity("Password didn't match!")
@@ -24,7 +25,7 @@ export default function Register() {
             password: password.current.value
         }
         try{
-            await axios.post("https://social-backend.netlify.app/api/auth/register", user);
+            await axios.post(AU + "auth/register", user);
             navigate("/login");
         }
         catch(err){
@@ -48,7 +49,7 @@ export default function Register() {
     <div className="login">
       <div className="loginWrapper">
         <div className="loginRight">
-          <h3 className="loginLogo">LamaSocial</h3>
+          <h3 className="loginLogo">SocialNode</h3>
           <span className="loginDesc">
             Connect with your friends and world around you with LamaSocial.
           </span>
