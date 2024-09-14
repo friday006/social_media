@@ -47,13 +47,13 @@ export default function Share() {
       console.error("Post save error:", err);
     }
   };
-//  console.log(user.profilePicture)
+//  console.log(user)
   return (
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
           <img className="shareProfileImg" 
-          src={PF + user.profilePicture} alt="" />
+          src={PF + user.profilePicture || PF + "person/noAvatar.png"} alt="" />
           <input className="shareInput"
             ref={desc}
             placeholder={"What's in your mind " + user.username + "?"}

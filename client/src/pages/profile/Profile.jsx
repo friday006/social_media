@@ -3,17 +3,19 @@ import Topbar from "../../components/topbar/Topbar";
 import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { AuthContext } from "../../context/AuthContext"; // Import the AuthContext
 
 export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const AU = process.env.REACT_APP_API_URL;
 
+  const { user: currentUser, dispatch } = useContext(AuthContext); // Get current user and dispatch from context
   const [user, setUser] = useState({});
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -28,6 +30,7 @@ export default function Profile() {
           withCredentials: true,
         });
         setUser(res.data);
+        // console.log('User Data:', res.data);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -68,7 +71,16 @@ export default function Profile() {
         },
         withCredentials: true,
       });
+
+      // Update user in local state
       setUser(res.data.user);
+
+      // Dispatch an action to update the user in the AuthContext
+      dispatch({
+        type: "UPDATE_USER",
+        payload: res.data.user, // Send the updated user data to the context
+      });
+
       setError("");
       alert(res.data.message);
       setPreview("");
@@ -77,7 +89,6 @@ export default function Profile() {
       setError("Failed to upload profile picture.");
     } finally {
       setUploading(false);
-      window.location.reload();
     }
   };
 
@@ -88,6 +99,9 @@ export default function Profile() {
       setFile(null);
     }
   };
+
+  // Conditional rendering logic
+  const isOwnProfile = currentUser && currentUser._id === user._id;
 
   return (
     <>
@@ -108,35 +122,37 @@ export default function Profile() {
                   src={user.profilePicture ? PF + user.profilePicture : PF + "person/noAvatar.png"}
                   alt="Profile"
                 />
-                <div className="editContainer">
-                  <form className="fileInputContainer" onSubmit={handleSubmit}>
-                    <label htmlFor="file" className="updateOption">
-                      <AddIcon htmlColor="blue" className="updateIcon" />
-                      <input
-                        style={{ display: "none" }}
-                        type="file"
-                        id="file"
-                        accept=".png, .jpeg, .jpg"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                    {preview && (
-                      <div className="previewContainer">
-                        <img src={preview} alt="Preview" className="previewImg" />
-                        <CancelIcon className="cancelPreview" onClick={handleCancelPreview} />
-                        <button
-                          className="profileEditButton"
-                          onClick={handleSubmit}
-                          disabled={uploading}
-                          type="button"
-                        >
-                          {uploading ? "Uploading..." : "Upload"}
-                        </button>
-                      </div>
-                    )}
-                    {error && <p className="error">{error}</p>}
-                  </form>
-                </div>
+                {isOwnProfile && ( // Show edit container only for own profile
+                  <div className="editContainer">
+                    <form className="fileInputContainer" onSubmit={handleSubmit}>
+                      <label htmlFor="file" className="updateOption">
+                        <AddIcon htmlColor="blue" className="updateIcon" />
+                        <input
+                          style={{ display: "none" }}
+                          type="file"
+                          id="file"
+                          accept=".png, .jpeg, .jpg"
+                          onChange={handleFileChange}
+                        />
+                      </label>
+                      {preview && (
+                        <div className="previewContainer">
+                          <img src={preview} alt="Preview" className="previewImg" />
+                          <CancelIcon className="cancelPreview" onClick={handleCancelPreview} />
+                          <button
+                            className="profileEditButton"
+                            onClick={handleSubmit}
+                            disabled={uploading}
+                            type="button"
+                          >
+                            {uploading ? "Uploading..." : "Upload"}
+                          </button>
+                        </div>
+                      )}
+                      {error && <p className="error">{error}</p>}
+                    </form>
+                  </div>
+                )}
               </div>
             </div>
             <div className="profileInfo">
