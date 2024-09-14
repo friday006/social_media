@@ -1,50 +1,125 @@
-.profile{
+.profile {
     display: flex;
 }
 
-.profileRight{
+.profileRight {
     flex: 9;
 }
 
-.profileCover{
+.profileCover {
     height: 320px;
     position: relative;
 }
 
-.profileCoverImg{
+.profileCoverImg {
     width: 100%;
     height: 250px;
     object-fit: cover;
 }
 
-.profileUserImg{
+.profileUserImg {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
+    left: 50%; /* Align horizontally to the center */
     top: 150px;
+    transform: translateX(-50%); /* Center it horizontally */
     border: 3px solid white;
 }
 
-.profileInfo{
+.profileInfo {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.profileInfoName{
+.profileInfoName {
     font-size: 24px;
 }
 
-.profileInfoDesc{
+.profileInfoDesc {
     font-weight: 300;
 }
 
-.profileRightBottom{
+.profileRightBottom {
     display: flex;
+}
+
+.profileUserImgContainer {
+    display: flex;
+}
+
+.editContainer {
+    position: relative;
+    top: 10px; /* Adjust position to be near the bottom-right of profile picture */
+    left: calc(50% + 60px); /* Align with the right side of the profile picture */
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1; /* Ensure it stays on top */
+}
+
+.updateOption {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative; /* Add relative positioning */
+}
+
+.updateIcon {
+    font-size: 1.5rem;
+    color: white;
+    background-color: blue;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.previewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+    border: 2px solid #ddd; /* Add a border around the preview */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: absolute; /* Position absolutely */
+    top: 100%; /* Position it below the .updateOption */
+    left: 50%; /* Center it horizontally */
+    /* transform: translateX(-50%); Center it horizontally */
+    z-index: 2; /* Ensure it stays on top */
+}
+
+.previewImg {
+    width: 150px;  /* Control the size of the preview image */
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.cancelPreview {
+    font-size: 1.2rem;
+    color: red;
+    cursor: pointer;
+}
+
+.profileEditButton {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 10px;
+}
+
+.profileEditButton:disabled {
+    background-color: gray;
+    cursor: not-allowed;
 }
