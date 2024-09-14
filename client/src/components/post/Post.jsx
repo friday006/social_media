@@ -29,17 +29,22 @@ export default function Post({ post }) {
   }, [currentUser._id, post.likes]);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(`${AU}users?userId=${post.userId}`);
-        setUser(res.data);
-      } catch (err) {
-        console.error("Error fetching user:", err);
-      }
-    };
-    fetchUser();
-  }, [post.userId, AU]);
-//   console.log(post)
+    if (currentUser._id === post.userId) {
+      setUser(currentUser);
+    } else {
+      const fetchUser = async () => {
+        try {
+          const res = await axios.get(`${AU}users?userId=${post.userId}`);
+          setUser(res.data);
+        } catch (err) {
+          console.error("Error fetching user:", err);
+        }
+      };
+      fetchUser();
+    }
+  }, [post.userId, AU, currentUser]);
+  
+  // console.log(user.profilePicture)
   return (
     <div className="post">
       <div className="postWrapper">
