@@ -27,7 +27,8 @@ export default function Topbar() {
       if (debouncedSearchQuery) {
         try {
           const res = await axios.get(`${AU}users?username=${debouncedSearchQuery}`);
-          setSearchResults(res.data);
+          const data = Array.isArray(res.data) ? res.data : [res.data]; // Normalize the response to always be an array
+        setSearchResults(data);
         } catch (err) {
           console.error(err);
         }
@@ -38,7 +39,8 @@ export default function Topbar() {
 
     fetchUsers();
   }, [debouncedSearchQuery, AU]);
-console.log(`${AU}users?username=${debouncedSearchQuery}`)
+  // console.log('Search results:', typeof searchResults); // Log searchResults
+  // console.log('Search results length:', searchResults.length); // Log searchResults.length
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -59,14 +61,11 @@ console.log(`${AU}users?username=${debouncedSearchQuery}`)
             <div className="searchResults">
               {searchResults.map((result) => (
                 <Link to={`/profile/${result.username}`} key={result._id} className="searchResultItem">
-                  <img
-                    src={result.profilePicture ? PF + result.profilePicture : PF + "person/noAvatar.png"}
-                    alt=""
-                    className="searchResultImg"
-                  />
+                  <Search className="searchResultIcon" /> {/* This is where we add the search icon */}
                   <span className="searchResultName">{result.username}</span>
                 </Link>
               ))}
+              {/* <h4>This is profile name</h4> */}
             </div>
           )}
         </div>

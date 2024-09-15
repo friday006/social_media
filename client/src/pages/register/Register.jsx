@@ -51,7 +51,7 @@ export default function Register() {
         <div className="loginRight">
           <h3 className="loginLogo">SocialNode</h3>
           <span className="loginDesc">
-            Connect with your friends and world around you with LamaSocial.
+            Connect with your friends and world around you with Social Node.
           </span>
         </div>
         <div className="loginLeft">
