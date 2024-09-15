@@ -1,13 +1,19 @@
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@mui/icons-material";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import { useDebounce } from "use-debounce";
 
 export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const AU = process.env.REACT_APP_API_URL;
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500); // Debounce with 500ms delay
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
@@ -16,6 +22,25 @@ export default function Topbar() {
     window.location.href = "/login";
   };
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (debouncedSearchQuery) {
+        try {
+          const res = await axios.get(`${AU}users?username=${debouncedSearchQuery}`);
+          const data = Array.isArray(res.data) ? res.data : [res.data]; // Normalize the response to always be an array
+        setSearchResults(data);
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        setSearchResults([]);
+      }
+    };
+
+    fetchUsers();
+  }, [debouncedSearchQuery, AU]);
+  // console.log('Search results:', typeof searchResults); // Log searchResults
+  // console.log('Search results length:', searchResults.length); // Log searchResults.length
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -29,7 +54,20 @@ export default function Topbar() {
           <input
             placeholder="Search for friend, post or video"
             className="searchInput"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
+          {searchResults.length > 0 && (
+            <div className="searchResults">
+              {searchResults.map((result) => (
+                <Link to={`/profile/${result.username}`} key={result._id} className="searchResultItem">
+                  <Search className="searchResultIcon" /> {/* This is where we add the search icon */}
+                  <span className="searchResultName">{result.username}</span>
+                </Link>
+              ))}
+              {/* <h4>This is profile name</h4> */}
+            </div>
+          )}
         </div>
       </div>
       <div className="topbarRight">
