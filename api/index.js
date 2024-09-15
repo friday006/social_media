@@ -28,12 +28,13 @@ app.use(helmet({
   contentSecurityPolicy: {
     useDefaults: true,
     directives: {
-      "img-src": ["'self'", "data:", "https://res.cloudinary.com"],
+      "img-src": ["'self'", "data:", "blob:", "https://res.cloudinary.com"],
       // Add other directives as needed
     },
   },
   crossOriginResourcePolicy: false,
 }));
+
 
 app.use(morgan("common"));
 
