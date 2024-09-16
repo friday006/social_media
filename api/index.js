@@ -17,7 +17,7 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:3000', // Allow localhost during development
-    'https://social0.netlify.app', // Allow your render in production
+    'https://social-media-cdc2.onrender.com', // Allow your render in production
   ],
   credentials: true, // If you're using cookies or sessions
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

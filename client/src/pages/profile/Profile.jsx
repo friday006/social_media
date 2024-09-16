@@ -129,8 +129,8 @@ export default function Profile() {
                         <AddIcon htmlColor="blue" className="updateIcon" />
                         <input
                           style={{ display: "none" }}
-                          type="file"
-                          id="file"
+                          type="profileFileInput"
+                          id="profileFileInput"
                           accept=".png, .jpeg, .jpg"
                           onChange={handleFileChange}
                         />
