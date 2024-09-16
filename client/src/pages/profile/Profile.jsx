@@ -125,11 +125,11 @@ export default function Profile() {
                 {isOwnProfile && ( // Show edit container only for own profile
                   <div className="editContainer">
                     <form className="fileInputContainer" onSubmit={handleSubmit}>
-                      <label htmlFor="file" className="updateOption">
+                      <label htmlFor="profileFileInput" className="updateOption">
                         <AddIcon htmlColor="blue" className="updateIcon" />
                         <input
                           style={{ display: "none" }}
-                          type="profileFileInput"
+                          type="file"
                           id="profileFileInput"
                           accept=".png, .jpeg, .jpg"
                           onChange={handleFileChange}
