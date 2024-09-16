@@ -1,5 +1,5 @@
 import "./rightbar.css";
-import { Users } from "../../dummyData";
+// import { Users } from "../../dummyData";
 import Online from "../online/Online";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ export default function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   
   const [friends, setFriends] = useState([]);
+  const [allUsers, setAllUsers] = useState([]); // State for all users
   const {user: currentUser, dispatch} = useContext(AuthContext)
   const [followed, setFollowed] = useState(currentUser.followings.includes(user?.id));
   
@@ -30,7 +31,19 @@ export default function Rightbar({ user }) {
     }
   }, [user, AU]);
 
-
+// Fetch all users for the home page
+useEffect(() => {
+  const fetchAllUsers = async () => {
+    try {
+      const res = await axios.get(`${AU}users/all`);
+      const sortedUsers = res.data.sort((a, b) => a.username.localeCompare(b.username)); // Sort users by name
+        setAllUsers(sortedUsers); // Set the sorted users
+    } catch (error) {
+      console.log("Error fetching all users:", error);
+    }
+  };
+  fetchAllUsers();
+}, [AU]);
 
   const handleClick = async ()=>{
     try {
@@ -60,8 +73,8 @@ export default function Rightbar({ user }) {
         <img className="rightbarAd" src="assets/ad.png" alt="" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {Users.map((u) => (
-            <Online key={u.id} user={u} />
+        {allUsers.map((u) => (
+            <Online key={u._id} user={u} />
           ))}
         </ul>
       </>
